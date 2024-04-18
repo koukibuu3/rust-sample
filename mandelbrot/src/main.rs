@@ -58,15 +58,20 @@ fn test_parse_pair() {
     assert_eq!(parse_pair::<i32>("10,20xy", ','), None);
     assert_eq!(parse_pair::<f64>("0.5x", 'x'), None);
     assert_eq!(parse_pair::<f64>("0.5x1.5", 'x'), Some((0.5, 1.5)));
-}fn render(
-    pixels: &mut [u8],
-    bounds: (usize, usize),
-    upper_left: Complex<f64>,
-    lower_right: Complex<f64>,
-) {
-    assert!(pixels.len() == bounds.0 * bounds.1);
+}
 
-    for row in 0..bounds.0 {
-        // TODO
+fn parse_complex(s: &str) -> Option<Complex<f64>> {
+    match parse_pair(s, ',') {
+        Some((re, im)) => Some(Complex { re, im }),
+        None => None,
     }
+}
+
+#[test]
+fn test_parse_complex() {
+    assert_eq!(
+        parse_complex("1.25,-0.0625"),
+        Some(Complex { re: 1.25, im: -0.0625 })
+    );
+    assert_eq!(parse_complex(",-0.0625"), None);
 }
