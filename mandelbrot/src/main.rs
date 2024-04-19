@@ -124,3 +124,27 @@ fn render(
         }
     }
 }
+
+use image::ColorType;
+use image::png::PNGEncoder;
+use std::fs::File;
+
+fn write_image(filename: &str, pixels: &[u8], bounds: (usize, usize)) -> Result<(), std::io::Error> {
+    // let output = match File::create(filename) {
+    //     Ok(f) => f,
+    //     Err(e) => {
+    //         return Err(e);
+    //     }
+    // };
+    // 上記と同様の処理が以下で書ける
+    let output = File::create(filename)?;
+
+    let encoder = PNGEncoder::new(output);
+    encoder.encode(
+        pixels,
+        bounds.0 as u32, bounds.1 as u32,
+        ColorType::Gray(8)
+    )?;
+
+    Ok(())
+}
